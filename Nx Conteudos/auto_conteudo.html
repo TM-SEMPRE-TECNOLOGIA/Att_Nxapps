@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Content Automation Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1117;
+    --card: #111820;
+    --border: #1e2d3d;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --green: #10b981;
+    --pink: #f43f5e;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --gemini: #4285f4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeDown 0.8s ease;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 6px 14px;
+    border-radius: 2px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  .badge::before { content: '◆'; font-size: 8px; }
+
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* Flow diagram */
+  .flow-section {
+    margin-bottom: 60px;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 20px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .flow-node {
+    flex-shrink: 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    text-align: center;
+    min-width: 140px;
+    transition: all 0.3s ease;
+    cursor: default;
+    position: relative;
+  }
+
+  .flow-node:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+
+  .flow-node.input { border-color: var(--accent); box-shadow: 0 0 20px rgba(0,229,255,0.1); }
+  .flow-node.gemini { border-color: var(--gemini); box-shadow: 0 0 20px rgba(66,133,244,0.1); }
+  .flow-node.output-ig { border-color: var(--pink); box-shadow: 0 0 20px rgba(244,63,94,0.1); }
+  .flow-node.output-li { border-color: var(--gemini); box-shadow: 0 0 20px rgba(66,133,244,0.1); }
+  .flow-node.output-yt { border-color: #ff0000; box-shadow: 0 0 20px rgba(255,0,0,0.1); }
+
+  .flow-node .node-icon { font-size: 1.8rem; margin-bottom: 6px; }
+  .flow-node .node-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; }
+  .flow-node .node-sub { font-size: 0.65rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-top: 2px; }
+
+  .arrow {
+    flex-shrink: 0;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 1.2rem;
+    position: relative;
+  }
+
+  .arrow::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), var(--accent), var(--border));
+    opacity: 0.5;
+  }
+
+  .arrow span { background: var(--bg); padding: 0 4px; color: var(--accent); font-size: 14px; z-index: 1; }
+
+  /* Tool grid */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 60px;
+  }
+
+  .tool-category {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease both;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .tool-category:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  }
+
+  .tool-category:nth-child(1) { animation-delay: 0.1s; }
+  .tool-category:nth-child(2) { animation-delay: 0.15s; }
+  .tool-category:nth-child(3) { animation-delay: 0.2s; }
+  .tool-category:nth-child(4) { animation-delay: 0.25s; }
+  .tool-category:nth-child(5) { animation-delay: 0.3s; }
+  .tool-category:nth-child(6) { animation-delay: 0.35s; }
+
+  .cat-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cat-header.blue { background: linear-gradient(135deg, rgba(66,133,244,0.15), transparent); }
+  .cat-header.cyan { background: linear-gradient(135deg, rgba(0,229,255,0.12), transparent); }
+  .cat-header.purple { background: linear-gradient(135deg, rgba(124,58,237,0.15), transparent); }
+  .cat-header.pink { background: linear-gradient(135deg, rgba(244,63,94,0.15), transparent); }
+  .cat-header.amber { background: linear-gradient(135deg, rgba(245,158,11,0.15), transparent); }
+  .cat-header.green { background: linear-gradient(135deg, rgba(16,185,129,0.15), transparent); }
+  .cat-header.red { background: linear-gradient(135deg, rgba(255,0,0,0.15), transparent); }
+
+  .cat-icon { font-size: 1.6rem; }
+  .cat-title { font-size: 0.9rem; font-weight: 700; }
+  .cat-subtitle { font-size: 0.7rem; color: var(--muted); font-family: 'Space Mono', monospace; }
+
+  .tool-list { padding: 12px; }
+
+  .tool-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    transition: background 0.2s;
+    cursor: default;
+  }
+
+  .tool-item:hover { background: rgba(255,255,255,0.04); }
+  .tool-item:last-child { margin-bottom: 0; }
+
+  .tool-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .blue .tool-dot { background: var(--gemini); }
+  .cyan .tool-dot { background: var(--accent); }
+  .purple .tool-dot { background: var(--accent2); }
+  .pink .tool-dot { background: var(--pink); }
+  .amber .tool-dot { background: var(--accent3); }
+  .green .tool-dot { background: var(--green); }
+  .red .tool-dot { background: #ff4444; }
+
+  .tool-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .tool-desc {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.4;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .tool-tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-top: 4px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-free { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .tag-paid { background: rgba(245,158,11,0.12); color: var(--accent3); border: 1px solid rgba(245,158,11,0.3); }
+  .tag-core { background: rgba(0,229,255,0.1); color: var(--accent); border: 1px solid rgba(0,229,255,0.25); }
+  .tag-api { background: rgba(124,58,237,0.12); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+
+  /* Stack visual */
+  .stack-section {
+    margin-bottom: 60px;
+  }
+
+  .stack-visual {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stack-visual::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+  }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 700px) {
+    .stack-grid { grid-template-columns: 1fr; }
+    .flow-row { gap: 0; }
+  }
+
+  .stack-col h3 {
+    font-size: 0.75rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stack-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .stack-item:last-child { border-bottom: none; }
+
+  .si-emoji { font-size: 1.2rem; width: 28px; text-align: center; }
+  .si-name { font-size: 0.82rem; font-weight: 700; }
+  .si-role { font-size: 0.68rem; color: var(--muted); font-family: 'Space Mono', monospace; }
+
+  /* Phase roadmap */
+  .phases {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  .phase-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .phase-card:nth-child(1) { animation-delay: 0.05s; border-top: 2px solid var(--accent); }
+  .phase-card:nth-child(2) { animation-delay: 0.1s; border-top: 2px solid var(--accent2); }
+  .phase-card:nth-child(3) { animation-delay: 0.15s; border-top: 2px solid var(--accent3); }
+  .phase-card:nth-child(4) { animation-delay: 0.2s; border-top: 2px solid var(--green); }
+
+  .phase-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 700;
+    opacity: 0.06;
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    line-height: 1;
+  }
+
+  .phase-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .phase-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .phase-items { list-style: none; }
+  .phase-items li {
+    font-size: 0.75rem;
+    color: var(--muted);
+    padding: 4px 0;
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    gap: 8px;
+  }
+
+  .phase-items li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+
+  /* Output cards */
+  .outputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 600px) {
+    .outputs { grid-template-columns: 1fr; }
+  }
+
+  .output-card {
+    border-radius: 6px;
+    padding: 24px 20px;
+    border: 1px solid var(--border);
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .output-card.ig {
+    background: linear-gradient(135deg, rgba(244,63,94,0.08) 0%, rgba(124,58,237,0.08) 100%);
+    border-color: rgba(244,63,94,0.25);
+    animation-delay: 0.1s;
+  }
+  .output-card.li {
+    background: linear-gradient(135deg, rgba(66,133,244,0.08) 0%, rgba(0,229,255,0.06) 100%);
+    border-color: rgba(66,133,244,0.25);
+    animation-delay: 0.15s;
+  }
+  .output-card.yt {
+    background: linear-gradient(135deg, rgba(255,0,0,0.08) 0%, rgba(245,158,11,0.06) 100%);
+    border-color: rgba(255,80,0,0.25);
+    animation-delay: 0.2s;
+  }
+
+  .out-icon { font-size: 2rem; margin-bottom: 12px; }
+  .out-name { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .out-format { font-size: 0.7rem; font-family: 'Space Mono', monospace; color: var(--muted); margin-bottom: 12px; }
+  .out-specs { list-style: none; }
+  .out-specs li {
+    font-size: 0.72rem;
+    color: var(--muted);
+    padding: 3px 0;
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    gap: 8px;
+  }
+  .out-specs li::before { content: '■'; font-size: 6px; margin-top: 4px; color: var(--accent); }
+
+  /* Cost estimate */
+  .cost-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .cost-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+    transition: background 0.2s;
+  }
+
+  .cost-row:hover:not(.cost-header) { background: rgba(255,255,255,0.03); }
+  .cost-row:last-child { border-bottom: none; }
+
+  .cost-header {
+    background: rgba(0,229,255,0.05);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .cost-tool { font-weight: 700; }
+  .cost-free { color: var(--green); font-family: 'Space Mono', monospace; font-size: 0.75rem; }
+  .cost-paid { color: var(--accent3); font-family: 'Space Mono', monospace; font-size: 0.75rem; }
+  .cost-type { color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.72rem; }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Glow pulse on accent nodes */
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(0,229,255,0.1); }
+    50% { box-shadow: 0 0 35px rgba(0,229,255,0.25); }
+  }
+
+  .flow-node.input { animation: pulse-glow 3s ease-in-out infinite; }
+
+  .tip-box {
+    background: rgba(0,229,255,0.05);
+    border: 1px solid rgba(0,229,255,0.15);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    line-height: 1.6;
+  }
+
+  .tip-box strong { color: var(--accent); }
+
+  .split-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 600px) { .split-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="badge">AI CONTENT AUTOMATION STACK</div>
+    <h1>Automação de Conteúdo<br>com Gemini API</h1>
+    <p class="subtitle">// arquitetura completa · ferramentas · fluxo de desenvolvimento</p>
+  </header>
+
+  <!-- Flow diagram -->
+  <section class="flow-section">
+    <div class="section-label">01 — FLUXO PRINCIPAL</div>
+    <div class="flow-row">
+      <div class="flow-node input">
+        <div class="node-icon">🧠</div>
+        <div class="node-title">PROMPT</div>
+        <div class="node-sub">entrada do usuário</div>
+      </div>
+      <div class="arrow"><span>▶</span></div>
+      <div class="flow-node gemini">
+        <div class="node-icon">♊</div>
+        <div class="node-title">GEMINI API</div>
+        <div class="node-sub">texto + roteiro</div>
+      </div>
+      <div class="arrow"><span>▶</span></div>
+      <div class="flow-node gemini" style="border-color:#9c27b0;">
+        <div class="node-icon">🎨</div>
+        <div class="node-title">IMAGEN 3</div>
+        <div class="node-sub">geração de imagem</div>
+      </div>
+      <div class="arrow"><span>▶</span></div>
+      <div class="flow-node" style="border-color:#ff9800;">
+        <div class="node-icon">🎬</div>
+        <div class="node-title">VEO 2 / FFmpeg</div>
+        <div class="node-sub">vídeo / reels</div>
+      </div>
+      <div class="arrow"><span>▶</span></div>
+      <div class="flow-node" style="border-color:#10b981;">
+        <div class="node-icon">📤</div>
+        <div class="node-title">PUBLISH</div>
+        <div class="node-sub">IG · LI · YT</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Output platforms -->
+  <section>
+    <div class="section-label">02 — PLATAFORMAS DE SAÍDA</div>
+    <div class="outputs">
+      <div class="output-card ig">
+        <div class="out-icon">📸</div>
+        <div class="out-name">Instagram</div>
+        <div class="out-format">Post · Stories · Reels</div>
+        <ul class="out-specs">
+          <li>Imagem 1080×1080 (post)</li>
+          <li>Stories 1080×1920</li>
+          <li>Reels 1080×1920 · 15-90s</li>
+          <li>Caption com hashtags via Gemini</li>
+          <li>Estilo visual consistente</li>
+          <li>API: Meta Graph API</li>
+        </ul>
+      </div>
+      <div class="output-card li">
+        <div class="out-icon">💼</div>
+        <div class="out-name">LinkedIn</div>
+        <div class="out-format">Post · Artigo · Carrossel</div>
+        <ul class="out-specs">
+          <li>Imagem 1200×627 (landscape)</li>
+          <li>Carrossel PDF gerado</li>
+          <li>Tom profissional via prompt</li>
+          <li>Texto otimizado para reach</li>
+          <li>Hashtags de nicho</li>
+          <li>API: LinkedIn API v2</li>
+        </ul>
+      </div>
+      <div class="output-card yt">
+        <div class="out-icon">▶️</div>
+        <div class="out-name">YouTube</div>
+        <div class="out-format">Shorts · Reels</div>
+        <ul class="out-specs">
+          <li>Vídeo 1080×1920 vertical</li>
+          <li>Duração: 15-60 segundos</li>
+          <li>Narração via TTS (ElevenLabs)</li>
+          <li>Legendas automáticas</li>
+          <li>Thumbnail gerada por IA</li>
+          <li>API: YouTube Data API v3</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tool categories -->
+  <section>
+    <div class="section-label">03 — FERRAMENTAS POR CATEGORIA</div>
+    <div class="tools-grid">
+
+      <!-- Gemini / AI Core -->
+      <div class="tool-category">
+        <div class="cat-header blue">
+          <div class="cat-icon">♊</div>
+          <div>
+            <div class="cat-title">GEMINI AI CORE</div>
+            <div class="cat-subtitle">Google AI Studio</div>
+          </div>
+        </div>
+        <div class="tool-list">
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--gemini)"></div>
+            <div>
+              <div class="tool-name">Gemini 1.5 Pro / Flash</div>
+              <div class="tool-desc">Geração de texto, roteiros, captions, hashtags e estratégia de conteúdo</div>
+              <span class="tool-tag tag-core">CORE</span> <span class="tool-tag tag-api">API</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--gemini)"></div>
+            <div>
+              <div class="tool-name">Imagen 3</div>
+              <div class="tool-desc">Geração de imagens com estilo definido via prompt estruturado</div>
+              <span class="tool-tag tag-paid">PAGO</span> <span class="tool-tag tag-api">API</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--gemini)"></div>
+            <div>
+              <div class="tool-name">Veo 2</div>
+              <div class="tool-desc">Geração de vídeos curtos por IA (acesso via waitlist/Vertex AI)</div>
+              <span class="tool-tag tag-paid">PAGO</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--gemini)"></div>
+            <div>
+              <div class="tool-name">Gemini Embeddings</div>
+              <div class="tool-desc">Memória semântica de estilos e histórico de conteúdo criado</div>
+              <span class="tool-tag tag-api">API</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Backend / Orquestração -->
+      <div class="tool-category">
+        <div class="cat-header cyan">
+          <div class="cat-icon">⚙️</div>
+          <div>
+            <div class="cat-title">BACKEND & ORQUESTRAÇÃO</div>
+            <div class="cat-subtitle">Automação com IA Dev</div>
+          </div>
+        </div>
+        <div class="tool-list">
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--accent)"></div>
+            <div>
+              <div class="tool-name">Python 3.11+</div>
+              <div class="tool-desc">Linguagem principal: chamadas à API, processamento e pipeline de conteúdo</div>
+              <span class="tool-tag tag-free">GRÁTIS</span> <span class="tool-tag tag-core">CORE</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--accent)"></div>
+            <div>
+              <div class="tool-name">FastAPI / Flask</div>
+              <div class="tool-desc">API REST interna para receber prompts e retornar conteúdo gerado</div>
+              <span class="tool-tag tag-free">GRÁTIS</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--accent)"></div>
+            <div>
+              <div class="tool-name">n8n / Zapier / Make</div>
+              <div class="tool-desc">Orquestração low-code: gatilhos, agendamento e publicação automática</div>
+              <span class="tool-tag tag-free">GRÁTIS</span> <span class="tool-tag tag-paid">PAGO</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--accent)"></div>
+            <div>
+              <div class="tool-name">Celery + Redis</div>
+              <div class="tool-desc">Fila de tarefas assíncronas para processamento paralelo de conteúdo</div>
+              <span class="tool-tag tag-free">GRÁTIS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Imagem & Design -->
+      <div class="tool-category">
+        <div class="cat-header purple">
+          <div class="cat-icon">🎨</div>
+          <div>
+            <div class="cat-title">IMAGEM & DESIGN</div>
+            <div class="cat-subtitle">Estilo consistente</div>
+          </div>
+        </div>
+        <div class="tool-list">
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--accent2)"></div>
+            <div>
+              <div class="tool-name">Pillow (PIL)</div>
+              <div class="tool-desc">Composição, redimensionamento, aplicação de filtros e texto sobre imagens</div>
+              <span class="tool-tag tag-free">GRÁTIS</span> <span class="tool-tag tag-core">CORE</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--accent2)"></div>
+            <div>
+              <div class="tool-name">Stable Diffusion (SDXL)</div>
+              <div class="tool-desc">Alternativa self-hosted para geração de imagem com LoRA de estilo próprio</div>
+              <span class="tool-tag tag-free">GRÁTIS</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--accent2)"></div>
+            <div>
+              <div class="tool-name">Canva API</div>
+              <div class="tool-desc">Aplicar templates de marca ao conteúdo gerado programaticamente</div>
+              <span class="tool-tag tag-paid">PAGO</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--accent2)"></div>
+            <div>
+              <div class="tool-name">Remove.bg API</div>
+              <div class="tool-desc">Remoção de fundo automática para composições profissionais</div>
+              <span class="tool-tag tag-paid">PAGO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vídeo -->
+      <div class="tool-category">
+        <div class="cat-header red">
+          <div class="cat-icon">🎬</div>
+          <div>
+            <div class="cat-title">VÍDEO & REELS</div>
+            <div class="cat-subtitle">Shorts · Reels · YT</div>
+          </div>
+        </div>
+        <div class="tool-list">
+          <div class="tool-item">
+            <div class="tool-dot" style="background:#ff4444"></div>
+            <div>
+              <div class="tool-name">FFmpeg</div>
+              <div class="tool-desc">Edição programática: concatenar cenas, adicionar áudio, legendas e transições</div>
+              <span class="tool-tag tag-free">GRÁTIS</span> <span class="tool-tag tag-core">CORE</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:#ff4444"></div>
+            <div>
+              <div class="tool-name">MoviePy</div>
+              <div class="tool-desc">Wrapper Python para FFmpeg — animações, clipes e composição de reels</div>
+              <span class="tool-tag tag-free">GRÁTIS</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:#ff4444"></div>
+            <div>
+              <div class="tool-name">ElevenLabs TTS</div>
+              <div class="tool-desc">Narração com voz realista para vídeos e reels em português</div>
+              <span class="tool-tag tag-paid">PAGO</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:#ff4444"></div>
+            <div>
+              <div class="tool-name">Whisper (OpenAI)</div>
+              <div class="tool-desc">Transcrição e geração de legendas automáticas (SRT) para vídeos</div>
+              <span class="tool-tag tag-free">GRÁTIS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Publicação -->
+      <div class="tool-category">
+        <div class="cat-header pink">
+          <div class="cat-icon">📤</div>
+          <div>
+            <div class="cat-title">PUBLICAÇÃO & APIS</div>
+            <div class="cat-subtitle">Distribuição automática</div>
+          </div>
+        </div>
+        <div class="tool-list">
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--pink)"></div>
+            <div>
+              <div class="tool-name">Meta Graph API</div>
+              <div class="tool-desc">Publicação automática no Instagram (post, stories, reels via container)</div>
+              <span class="tool-tag tag-free">GRÁTIS</span> <span class="tool-tag tag-api">API</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--pink)"></div>
+            <div>
+              <div class="tool-name">LinkedIn API v2</div>
+              <div class="tool-desc">Publicação de posts, imagens e carrosseis via UGC Posts endpoint</div>
+              <span class="tool-tag tag-free">GRÁTIS</span> <span class="tool-tag tag-api">API</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--pink)"></div>
+            <div>
+              <div class="tool-name">YouTube Data API v3</div>
+              <div class="tool-desc">Upload de Shorts, definição de thumbnail e metadados automatizados</div>
+              <span class="tool-tag tag-free">GRÁTIS</span> <span class="tool-tag tag-api">API</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--pink)"></div>
+            <div>
+              <div class="tool-name">Buffer / Later API</div>
+              <div class="tool-desc">Agendamento com calendário editorial e análise de melhor horário</div>
+              <span class="tool-tag tag-paid">PAGO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Infra & DB -->
+      <div class="tool-category">
+        <div class="cat-header green">
+          <div class="cat-icon">🗄️</div>
+          <div>
+            <div class="cat-title">INFRA & STORAGE</div>
+            <div class="cat-subtitle">Cloud · DB · Deploy</div>
+          </div>
+        </div>
+        <div class="tool-list">
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--green)"></div>
+            <div>
+              <div class="tool-name">Supabase / PostgreSQL</div>
+              <div class="tool-desc">Banco de dados para histórico de prompts, conteúdo gerado e métricas</div>
+              <span class="tool-tag tag-free">GRÁTIS</span> <span class="tool-tag tag-core">CORE</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--green)"></div>
+            <div>
+              <div class="tool-name">Google Cloud Storage</div>
+              <div class="tool-desc">Storage para imagens, vídeos e assets gerados (integrado ao Gemini)</div>
+              <span class="tool-tag tag-paid">PAGO</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--green)"></div>
+            <div>
+              <div class="tool-name">Railway / Render</div>
+              <div class="tool-desc">Deploy do backend Python com suporte a workers e tarefas agendadas</div>
+              <span class="tool-tag tag-free">GRÁTIS</span>
+            </div>
+          </div>
+          <div class="tool-item">
+            <div class="tool-dot" style="background:var(--green)"></div>
+            <div>
+              <div class="tool-name">Docker</div>
+              <div class="tool-desc">Containerização do pipeline completo para reprodução e escala</div>
+              <span class="tool-tag tag-free">GRÁTIS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Dev Roadmap -->
+  <section>
+    <div class="section-label">04 — ROADMAP DE DESENVOLVIMENTO</div>
+    <div class="phases">
+      <div class="phase-card">
+        <div class="phase-num">01</div>
+        <div class="phase-tag">FASE 1 · SEMANA 1-2</div>
+        <div class="phase-title">MVP · Texto + Imagem</div>
+        <ul class="phase-items">
+          <li>Setup Gemini API + Google AI Studio</li>
+          <li>Pipeline prompt → texto gerado</li>
+          <li>Imagen 3 para geração de imagem</li>
+          <li>Pillow para formatação por plataforma</li>
+          <li>Publicação manual ou via n8n</li>
+        </ul>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">02</div>
+        <div class="phase-tag">FASE 2 · SEMANA 3-4</div>
+        <div class="phase-title">Estilo & Publicação Auto</div>
+        <ul class="phase-items">
+          <li>Sistema de style guide em prompt</li>
+          <li>Integração Meta Graph API</li>
+          <li>Integração LinkedIn API v2</li>
+          <li>Banco de dados de conteúdo</li>
+          <li>Dashboard de controle simples</li>
+        </ul>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">03</div>
+        <div class="phase-tag">FASE 3 · MÊS 2</div>
+        <div class="phase-title">Vídeo & Reels</div>
+        <ul class="phase-items">
+          <li>Pipeline de vídeo com FFmpeg/MoviePy</li>
+          <li>TTS com ElevenLabs (narração)</li>
+          <li>Legendas automáticas com Whisper</li>
+          <li>Upload YouTube Shorts API</li>
+          <li>Reels automáticos no Instagram</li>
+        </ul>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">04</div>
+        <div class="phase-tag">FASE 4 · MÊS 3+</div>
+        <div class="phase-title">Escala & Analytics</div>
+        <ul class="phase-items">
+          <li>Agendamento inteligente com IA</li>
+          <li>A/B test de prompts e estilos</li>
+          <li>Analytics de performance integrado</li>
+          <li>Multi-conta e multi-cliente</li>
+          <li>Interface SaaS para usuários finais</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech stack summary -->
+  <section class="stack-section">
+    <div class="section-label">05 — TECH STACK RESUMIDO</div>
+    <div class="stack-visual">
+      <div class="stack-grid">
+        <div class="stack-col">
+          <h3>IA & Modelos</h3>
+          <div class="stack-item"><div class="si-emoji">♊</div><div><div class="si-name">Gemini 1.5 Pro/Flash</div><div class="si-role">texto · roteiro · caption</div></div></div>
+          <div class="stack-item"><div class="si-emoji">🖼️</div><div><div class="si-name">Imagen 3</div><div class="si-role">geração de imagem</div></div></div>
+          <div class="stack-item"><div class="si-emoji">🎬</div><div><div class="si-name">Veo 2</div><div class="si-role">geração de vídeo</div></div></div>
+          <div class="stack-item"><div class="si-emoji">🔊</div><div><div class="si-name">ElevenLabs</div><div class="si-role">text-to-speech</div></div></div>
+          <div class="stack-item"><div class="si-emoji">📝</div><div><div class="si-name">Whisper</div><div class="si-role">transcrição / legendas</div></div></div>
+        </div>
+        <div class="stack-col">
+          <h3>Backend & Infra</h3>
+          <div class="stack-item"><div class="si-emoji">🐍</div><div><div class="si-name">Python 3.11+</div><div class="si-role">linguagem principal</div></div></div>
+          <div class="stack-item"><div class="si-emoji">⚡</div><div><div class="si-name">FastAPI</div><div class="si-role">API REST interna</div></div></div>
+          <div class="stack-item"><div class="si-emoji">🔄</div><div><div class="si-name">n8n</div><div class="si-role">orquestração low-code</div></div></div>
+          <div class="stack-item"><div class="si-emoji">🗄️</div><div><div class="si-name">Supabase</div><div class="si-role">banco de dados</div></div></div>
+          <div class="stack-item"><div class="si-emoji">🐳</div><div><div class="si-name">Docker + Railway</div><div class="si-role">deploy e containerização</div></div></div>
+        </div>
+        <div class="stack-col">
+          <h3>Publicação & Mídia</h3>
+          <div class="stack-item"><div class="si-emoji">📸</div><div><div class="si-name">Meta Graph API</div><div class="si-role">Instagram automático</div></div></div>
+          <div class="stack-item"><div class="si-emoji">💼</div><div><div class="si-name">LinkedIn API v2</div><div class="si-role">posts e carrosseis</div></div></div>
+          <div class="stack-item"><div class="si-emoji">▶️</div><div><div class="si-name">YouTube API v3</div><div class="si-role">shorts e uploads</div></div></div>
+          <div class="stack-item"><div class="si-emoji">🎞️</div><div><div class="si-name">FFmpeg + MoviePy</div><div class="si-role">edição de vídeo</div></div></div>
+          <div class="stack-item"><div class="si-emoji">🎨</div><div><div class="si-name">Pillow + Imagen</div><div class="si-role">imagem e composição</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tips -->
+  <section>
+    <div class="section-label">06 — DICAS PARA O DESENVOLVIMENTO COM IA</div>
+    <div class="tip-box">
+      <strong>💡 Estilo Visual Consistente:</strong> Crie um "style prompt" fixo com paleta de cores, referências visuais e tom de comunicação. Passe esse prompt como contexto em toda chamada ao Imagen 3 para manter identidade visual da marca.
+    </div>
+    <div class="tip-box">
+      <strong>🔁 Orquestração Recomendada:</strong> Use <strong>n8n</strong> (self-hosted grátis) para conectar tudo com interface visual — recebe o prompt, chama sua API Python, gera imagem/vídeo e publica. Zero código nas automações de rotina.
+    </div>
+    <div class="tip-box">
+      <strong>🎬 Reels sem Veo 2:</strong> Enquanto o Veo 2 está em acesso restrito, use <strong>FFmpeg + MoviePy</strong> para criar vídeos animando as imagens geradas pelo Imagen 3 com zoom, fade e transições. Resultado profissional e gratuito.
+    </div>
+    <div class="tip-box">
+      <strong>📦 Estrutura de Projeto Sugerida:</strong> <strong>prompt_engine/</strong> → templates por plataforma · <strong>generators/</strong> → image, video, text · <strong>publishers/</strong> → ig, linkedin, youtube · <strong>scheduler/</strong> → calendário editorial · <strong>dashboard/</strong> → interface de controle
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
