@@ -1,0 +1,9 @@
+{
+  "name": "@att-nxapps/config-tailwind",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TM Sempre — Ocean Breeze Design System: tokens, cores, tipografia e tema TailwindCSS compartilhados entre apps",
+  "main": "tailwind.config.ts",
+  "scripts": {},
+  "keywords": ["tailwind", "design-system", "ocean-breeze", "tm-sempre"]
+}

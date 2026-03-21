@@ -1,0 +1,43 @@
+code_quality_check:
+  description: >
+    Revisar o código implementado neste sprint em busca de:
+    - Variáveis sem tipo TypeScript
+    - Funções sem comentário de propósito
+    - Imports não utilizados
+    - Componentes sem tratamento de erro
+    - Props sem validação (missing types)
+    - Console.log deixados no código
+    - TODOs sem issue referenciada
+  expected_output: >
+    Relatório em Markdown com: ✅ Aprovados, ⚠️ Avisos, ❌ Bloqueadores.
+    Se houver bloqueadores, listar arquivo:linha e ação corretiva.
+  agent: auditor
+
+ux_design_review:
+  description: >
+    Validar a implementação visual contra o Design System Ocean Breeze:
+    - Cores dentro da paleta definida em packages/config-tailwind
+    - Tipografia usando Inter/Fira Code (Google Fonts)
+    - Animações suaves (duration 200-500ms, ease-out)
+    - Hierarquia visual correta (heading h1>h2>h3>p)
+    - Micro-interações em hover e focus
+    - Dark mode funcionando
+    - Responsividade testada em mobile e desktop
+  expected_output: >
+    Score de 0-10 por dimensão (cores, tipografia, animação, hierarquia, responsividade)
+    com feedback específico para dimensões abaixo de 8.
+  agent: designer
+
+sprint_confirmation:
+  description: >
+    Ao concluir um sprint, gerar o documento de confirmação com:
+    - Resumo executivo do que foi implementado
+    - Lista de arquivos criados/modificados
+    - Métricas de qualidade (score de auditoria)
+    - Decisões técnicas tomadas e justificativas
+    - Links para commits relevantes
+    - Próximos passos sugeridos
+  expected_output: >
+    Arquivo Markdown salvo em .context/confirmation/sprint_XX_confirmation.md
+    pronto para ser referenciado no commit e no diario_de_dev.md.
+  agent: auditor

@@ -1,0 +1,30 @@
+{
+  "name": "att-nxapps",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TM Sempre Tecnologia — Monorepo de Apps NX via Turborepo",
+  "author": "Thiago Nascimento Barbosa",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "NX Relatorios/APP/frontend",
+    "Nx Conteudos"
+  ],
+  "packageManager": "npm@11.6.2",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "type-check": "turbo type-check",
+    "clean": "turbo clean && rm -rf node_modules",
+    "new:app": "echo 'Crie a pasta em apps/ e adicione um package.json com name único'"
+  },
+  "devDependencies": {
+    "turbo": "^2.8.20"
+  },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  }
+}

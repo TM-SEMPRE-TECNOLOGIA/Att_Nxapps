@@ -1,0 +1,11 @@
+{
+  "name": "@att-nxapps/nx-conteudos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NX Conteúdos — Gerador de conteúdo automatizado (HTML standalone). TM Sempre Tecnologia.",
+  "scripts": {
+    "dev": "echo 'Abra auto_conteudo.html no navegador'",
+    "build": "echo 'Build: nenhuma etapa necessária para HTML standalone'",
+    "lint": "echo 'Lint: n/a'"
+  }
+}

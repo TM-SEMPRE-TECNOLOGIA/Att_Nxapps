@@ -1,0 +1,21 @@
+{
+  "name": "@att-nxapps/ui-shared",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Componentes React compartilhados entre os apps do monorepo Att_Nxapps",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src/",
+    "type-check": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}
