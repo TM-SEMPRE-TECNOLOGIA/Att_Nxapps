@@ -1,0 +1,30 @@
+# Pesquisa: Sistema Inteligente de Disparo de Promoções
+
+## 1. Referências de Mercado (Inspirações)
+- **IA Divulgadora**: Foco em monitoramento automático de grupos, geração de links de afiliado (Shopee, Amazon, Magalu, etc.), criação de posts com IA e disparo automático/agendado para WhatsApp.
+- **AchadinBot**: Especializado em Shopee, focado em automação para grupos de "achadinhos", criativos com IA e agendamento.
+- **Lumi e Oferta Inteligente**: Soluções similares de automação de ofertas para WhatsApp/Telegram com foco em conversão e facilidade de uso.
+
+## 2. Funcionalidades Chave Identificadas
+- **Monitoramento**: Capturar ofertas de grandes marketplaces ou outros grupos.
+- **Conversão de Links**: Transformar links normais em links de afiliado automaticamente.
+- **Geração de Conteúdo (IA)**: Criar copys persuasivas, títulos e descrições usando LLMs (como GPT-4 ou Gemini).
+- **Agendamento Inteligente**: Definir horários de pico e intervalos entre disparos para evitar bloqueios.
+- **Multicanal**: Suporte principal para WhatsApp (via API) e Telegram.
+- **Segmentação**: Categorizar ofertas por nichos (eletrônicos, casa, moda, etc.).
+
+## 3. Tecnologias Recomendadas
+- **Linguagem**: Python (devido às bibliotecas de IA e facilidade com APIs).
+- **APIs de Marketplaces**: Shopee Open Platform, Amazon PA-API, Magalu Marketplace API.
+- **Automação de Mensagens**:
+    - WhatsApp: Z-API, Evolution API ou instâncias de Baileys/WA-Automate (soluções não oficiais mas populares para afiliados) ou API Business Oficial (mais cara/restrita).
+    - Telegram: Telegram Bot API (nativa e gratuita).
+- **IA/LLM**: OpenAI API (GPT-4o) ou Google Gemini API para geração de texto e análise de imagem/produto.
+- **Banco de Dados**: SQLite ou PostgreSQL para armazenar ofertas, logs e agendamentos.
+- **Agendamento**: Celery com Redis ou bibliotecas simples como `schedule` / `APScheduler`.
+
+## 4. Estratégia Anti-Bloqueio (WhatsApp)
+- Uso de intervalos aleatórios entre mensagens.
+- Variar o texto da copy (evitar mensagens idênticas).
+- Aquecimento de chips (warm-up).
+- Uso de instâncias separadas para diferentes nichos.

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano de Obra - Nx Conteudos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1a1014;
+            --surface: #2d1b1e;
+            --primary: #ff2d6b;
+            --secondary: #ffd166;
+            --accent: #c9a84c;
+            --text: #fff8f0;
+            --muted: #9a8f96;
+            --border: rgba(255, 45, 107, 0.15);
+            --card-bg: rgba(255, 45, 107, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding: 40px 20px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeIn 1s ease;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle { color: var(--secondary); font-family: 'JetBrains Mono'; font-size: 0.9rem; letter-spacing: 2px; }
+
+        .section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            border-left: 2px solid var(--border);
+        }
+
+        .timeline-item {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '✦';
+            position: absolute;
+            left: -39px;
+            top: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--bg);
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .timeline-title { font-weight: 700; font-size: 1.2rem; color: #fff; margin-bottom: 8px; }
+        .timeline-desc { font-size: 0.95rem; color: var(--muted); }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            list-style: none;
+        }
+
+        .tech-item {
+            background: rgba(255, 45, 107, 0.1);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 45, 107, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--muted);
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .glaucia-quote {
+            font-style: italic;
+            color: var(--secondary);
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="font-size: 0.8rem; color: var(--primary); letter-spacing: 4px; margin-bottom: 10px;">PROJETO</div>
+            <h1>ACHADINHOS DA GLÁUCIA</h1>
+            <p class="subtitle">// MIGA, PARA TUDO QUE ISSO É AUTOMÁTICO //</p>
+        </header>
+
+        <div class="glaucia-quote">
+            "Miga, eu já comprei TUDO isso com desconto. Agora o robô vai ensinar as suas amigas a comprarem também!" 💅
+        </div>
+
+        <div class="section">
+            <h2>🎯 Visão do Robot-Persona</h2>
+            <p>Transformar a busca exaustiva por ofertas em um fluxo 100% automático. O sistema monitora preços, a <strong>Gláucia</strong> cria o copy dramático, e o post é disparado nos grupos exatamente nos horários de maior conversão.</p>
+        </div>
+
+        <div class="section">
+            <h2>🏗️ Arquitetura SIAP (Gláucia + Upsell)</h2>
+            <p>O <strong>SIAP</strong> sustenta o carisma da Gláucia e agora inclui a <strong>Venda Casada Inteligente</strong>!</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div class="card">
+                    <h3>🔍 Ingestão</h3>
+                    <p>Monitoramento 24h de fontes e grupos (Mirroring).</p>
+                </div>
+                <div class="card">
+                    <h3>🧠 Motor IA</h3>
+                    <p>Gemini 1.5 convertendo dados em drama e vendas.</p>
+                </div>
+                <div class="card">
+                    <h3>🔗 Afiliados</h3>
+                    <p>Conversão instantânea de links para Shopee/Amazon.</p>
+                </div>
+                <div class="card">
+                    <h3>💰 Upsell 🚀</h3>
+                    <p>Vincular ofertas a Cursos (Hotmart/Kiwify) por nicho.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Roadmap de Implementação</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-title">Fase 1: O Batizado da Gláucia (MVP)</div>
+                    <div class="timeline-desc">Criação do motor de prompts, integração Shopee e primeiro disparo funcional via Telegram.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">Fase 2: O Despachante Escaneado</div>
+                    <div class="timeline-desc">Integração WhatsApp (Evolution API), gerador de criativos Imagen 3 e monitoramento de fontes.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">Fase 3: Expansão SIAP</div>
+                    <div class="timeline-desc">Suporte a novos Marketplaces e Dashboard de controle de nichos/performance.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛠️ Materiais de Luxo (Stack)</h2>
+            <ul class="tech-list">
+                <li class="tech-item">FastAPI (O Hub de Compras)</li>
+                <li class="tech-item">Gemini 1.5 (A Mente da Gláucia)</li>
+                <li class="tech-item">Imagen 3 (O Estúdio de Arte)</li>
+                <li class="tech-item">APScheduler (O Relógio da Gláucia)</li>
+                <li class="tech-item">Affiliate API (Deep Links)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📂 Árvore de Pastas</h2>
+            <pre style="font-family: 'JetBrains Mono'; font-size: 0.85rem; color: var(--muted);">
+Nx Conteudos/
+├── .planning/           (Cérebro do Projeto)
+├── generators/          (Módulos de Geração)
+│   ├── text_gen.py
+│   └── image_gen.py
+├── utils/               (Ferramentas Auxiliares)
+├── main.py              (Orchestrator)
+└── requirements.txt     (Lista de Compras)
+            </pre>
+        </div>
+
+        <footer>
+            <p>© 2026 TM Sempre Tecnologia - Turbo Dev Ecosystem</p>
+        </footer>
+    </div>
+</body>
+</html>

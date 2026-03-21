@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GLÁUCIA — A Personagem</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf7f2;
+      --dark: #1a1014;
+      --pink: #ff2d6b;
+      --pink2: #ff85a1;
+      --gold: #c9a84c;
+      --cream: #fff8f0;
+      --muted: #9a8f96;
+      --card: #fff;
+      --border: #ecddd6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* GRAIN */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--dark);
+      padding: 70px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 280px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.03);
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: -10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--pink);
+      color: #fff;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      padding: 6px 14px;
+      border-radius: 2px;
+      margin-bottom: 28px;
+      text-transform: uppercase;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 0;
+      align-items: end;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-text {
+      padding-bottom: 60px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--pink);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(64px, 10vw, 110px);
+      font-weight: 900;
+      line-height: 0.9;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--pink);
+    }
+
+    .hero-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 28px;
+    }
+
+    .hero-quote {
+      font-size: 17px;
+      color: rgba(255, 255, 255, 0.7);
+      font-style: italic;
+      font-family: 'Playfair Display', serif;
+      border-left: 2px solid var(--pink);
+      padding-left: 20px;
+      max-width: 400px;
+      line-height: 1.7;
+    }
+
+    /* PERSONAGEM ILUSTRAÇÃO */
+    .char-visual {
+      align-self: end;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .char-bubble {
+      background: var(--pink);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 20px 20px 4px 20px;
+      margin-bottom: 16px;
+      position: relative;
+      text-align: center;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .char-body {
+      width: 280px;
+      height: 340px;
+      position: relative;
+    }
+
+    /* SVG PERSONAGEM */
+    .char-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* SEÇÕES */
+    .section {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--pink);
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 32px;
+    }
+
+    /* IDENTIDADE */
+    .id-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .id-cell {
+      background: var(--card);
+      padding: 28px;
+    }
+
+    .id-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .id-value {
+      font-size: 15px;
+      color: var(--dark);
+      font-weight: 500;
+      line-height: 1.6;
+    }
+
+    .id-value strong {
+      color: var(--pink);
+    }
+
+    .id-value .gold {
+      color: var(--gold);
+    }
+
+    /* PERSONALIDADE */
+    .traits-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .trait-pill {
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2px solid;
+      cursor: default;
+      transition: transform 0.2s;
+    }
+
+    .trait-pill:hover {
+      transform: scale(1.05) rotate(-1deg);
+    }
+
+    .t1 {
+      border-color: var(--pink);
+      color: var(--pink);
+      background: rgba(255, 45, 107, 0.06);
+    }
+
+    .t2 {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201, 168, 76, 0.06);
+    }
+
+    .t3 {
+      border-color: var(--dark);
+      color: var(--dark);
+      background: rgba(26, 16, 20, 0.04);
+    }
+
+    /* VOZ */
+    .chat-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .msg-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      background: var(--pink);
+      color: #fff;
+    }
+
+    .msg-bubble {
+      background: var(--dark);
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 4px 18px 18px 18px;
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 480px;
+    }
+
+    .msg-bubble .em {
+      color: var(--pink);
+      font-weight: 700;
+    }
+
+    .msg-bubble .gold {
+      color: #ffd166;
+      font-weight: 700;
+    }
+
+    .msg-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      padding-left: 48px;
+    }
+
+    /* VISUAL REFERENCE */
+    .visual-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .visual-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .visual-swatch {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+    }
+
+    .visual-info {
+      padding: 16px;
+    }
+
+    .visual-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .visual-desc {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* PROMPTS IA */
+    .prompt-box {
+      background: var(--dark);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prompt-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--pink), var(--gold));
+    }
+
+    .prompt-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--pink);
+      letter-spacing: 3px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .prompt-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: #e8d5c4;
+      line-height: 1.9;
+      white-space: pre-wrap;
+    }
+
+    .prompt-text .hl {
+      color: #ffd166;
+    }
+
+    .prompt-text .pk {
+      color: var(--pink2);
+    }
+
+    /* REGRAS */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .rule-card {
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid;
+    }
+
+    .rule-do {
+      background: rgba(0, 200, 100, 0.04);
+      border-color: rgba(0, 200, 100, 0.3);
+    }
+
+    .rule-dont {
+      background: rgba(255, 45, 107, 0.04);
+      border-color: rgba(255, 45, 107, 0.3);
+    }
+
+    .rule-header {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .rule-do .rule-header {
+      color: #00c864;
+    }
+
+    .rule-dont .rule-header {
+      color: var(--pink);
+    }
+
+    .rule-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: #555;
+      align-items: flex-start;
+    }
+
+    .rule-icon {
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    /* NOME DO CANAL */
+    .name-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .name-opt {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .name-opt:hover,
+    .name-opt.selected {
+      border-color: var(--pink);
+      background: rgba(255, 45, 107, 0.04);
+      transform: translateX(4px);
+    }
+
+    .name-opt.top {
+      border-color: var(--pink);
+      background: rgba(255, 45, 107, 0.04);
+    }
+
+    .name-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .name-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .name-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      background: var(--pink);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .char-visual {
+        display: none;
+      }
+
+      .id-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rules-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .visual-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg-text">GLÁUCIA</div>
+    <div class="container">
+      <div class="tag">✦ Personagem Icônico — Moda & Beleza</div>
+      <div class="hero-inner">
+        <div class="hero-text">
+          <div class="hero-eyebrow">apresentando</div>
+          <div class="hero-name">Glá<em>ucia</em></div>
+          <div class="hero-subtitle">// A RAINHA DOS ACHADINHOS</div>
+          <p class="hero-quote">
+            "Miga, eu já comprei TUDO isso com desconto. Agora você também vai."
+          </p>
+        </div>
+        <div class="char-visual">
+          <div class="char-bubble">🚨 MIGA, PARA TUDO! 🚨<br>60% OFF NA SHEIN!</div>
+
+          <!-- SVG PERSONAGEM GLÁUCIA -->
+          <svg class="char-svg" viewBox="0 0 280 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- CORPO / VESTIDO -->
+            <ellipse cx="140" cy="290" rx="75" ry="18" fill="#1a1014" opacity="0.15" />
+            <!-- SAIA -->
+            <path d="M95 210 Q90 270 80 310 Q110 320 140 318 Q170 320 200 310 Q190 270 185 210 Z" fill="#ff2d6b" />
+            <!-- CINTURA / BLUSA -->
+            <rect x="100" y="170" width="80" height="50" rx="8" fill="#1a1014" />
+            <!-- DETALHES BLUSA -->
+            <path d="M110 185 Q140 175 170 185" stroke="#ff2d6b" stroke-width="2" fill="none" />
+            <!-- BRAÇO ESQ (levantado com celular) -->
+            <path d="M100 180 Q70 160 60 130" stroke="#f5c5a3" stroke-width="18" stroke-linecap="round" />
+            <!-- CELULAR -->
+            <rect x="44" y="100" width="26" height="42" rx="4" fill="#1a1014" />
+            <rect x="47" y="103" width="20" height="33" rx="2" fill="#ff2d6b" opacity="0.8" />
+            <circle cx="57" cy="139" r="3" fill="#555" />
+            <!-- BRAÇO DIR -->
+            <path d="M180 185 Q205 195 215 220" stroke="#f5c5a3" stroke-width="16" stroke-linecap="round" />
+            <!-- MÃO DIR com sacola -->
+            <path d="M205 215 Q215 218 218 228 Q220 240 210 244 Q200 248 195 238 Q192 228 200 222 Z" fill="#f5c5a3" />
+            <!-- SACOLA -->
+            <rect x="210" y="228" width="28" height="32" rx="4" fill="#ffd166" />
+            <path d="M215 228 Q215 218 224 218 Q233 218 233 228" stroke="#c9a84c" stroke-width="2.5" fill="none" />
+            <text x="214" y="247" font-size="10" fill="#c9a84c" font-weight="bold">★</text>
+            <!-- PESCOÇO -->
+            <rect x="128" y="152" width="24" height="22" rx="4" fill="#f5c5a3" />
+            <!-- COLAR -->
+            <path d="M122 168 Q140 178 158 168" stroke="#ffd166" stroke-width="2.5" fill="none" />
+            <circle cx="140" cy="173" r="3" fill="#ffd166" />
+            <!-- CABEÇA -->
+            <ellipse cx="140" cy="128" rx="42" ry="45" fill="#f5c5a3" />
+            <!-- CABELO -->
+            <path
+              d="M98 118 Q95 80 118 62 Q140 50 162 62 Q185 80 182 118 Q175 95 165 88 Q155 75 140 74 Q125 75 115 88 Q105 95 98 118Z"
+              fill="#2d1b1e" />
+            <!-- VOLUME CABELO LATERAL -->
+            <path d="M98 118 Q85 130 90 155 Q95 170 105 172" stroke="#2d1b1e" stroke-width="14" stroke-linecap="round"
+              fill="none" />
+            <path d="M182 118 Q195 130 190 155 Q185 170 175 172" stroke="#2d1b1e" stroke-width="14"
+              stroke-linecap="round" fill="none" />
+            <!-- COQUE / BOB HAIR -->
+            <ellipse cx="140" cy="68" rx="32" ry="20" fill="#2d1b1e" />
+            <!-- TIARA -->
+            <path d="M108 100 Q140 88 172 100" stroke="#ffd166" stroke-width="3" fill="none" />
+            <circle cx="140" cy="88" r="5" fill="#ff2d6b" />
+            <circle cx="122" cy="95" r="3.5" fill="#ffd166" />
+            <circle cx="158" cy="95" r="3.5" fill="#ffd166" />
+            <!-- OLHOS -->
+            <ellipse cx="124" cy="122" rx="9" ry="10" fill="white" />
+            <ellipse cx="156" cy="122" rx="9" ry="10" fill="white" />
+            <ellipse cx="125" cy="123" rx="5.5" ry="6" fill="#2d1b1e" />
+            <ellipse cx="157" cy="123" rx="5.5" ry="6" fill="#2d1b1e" />
+            <!-- BRILHO OLHOS -->
+            <circle cx="127" cy="121" r="2" fill="white" />
+            <circle cx="159" cy="121" r="2" fill="white" />
+            <!-- CÍLIOS -->
+            <path d="M115 114 Q116 110 118 113" stroke="#2d1b1e" stroke-width="1.5" fill="none" />
+            <path d="M120 112 Q121 108 123 111" stroke="#2d1b1e" stroke-width="1.5" fill="none" />
+            <path d="M128 111 Q130 107 131 111" stroke="#2d1b1e" stroke-width="1.5" fill="none" />
+            <path d="M133 112 Q135 108 136 112" stroke="#2d1b1e" stroke-width="1.5" fill="none" />
+            <path d="M147 112 Q149 108 150 112" stroke="#2d1b1e" stroke-width="1.5" fill="none" />
+            <path d="M152 111 Q154 107 155 111" stroke="#2d1b1e" stroke-width="1.5" fill="none" />
+            <path d="M159 112 Q161 108 162 112" stroke="#2d1b1e" stroke-width="1.5" fill="none" />
+            <path d="M163 114 Q165 110 166 113" stroke="#2d1b1e" stroke-width="1.5" fill="none" />
+            <!-- SOBRANCELHAS -->
+            <path d="M113 112 Q122 106 131 110" stroke="#2d1b1e" stroke-width="2.5" stroke-linecap="round"
+              fill="none" />
+            <path d="M149 110 Q158 106 167 112" stroke="#2d1b1e" stroke-width="2.5" stroke-linecap="round"
+              fill="none" />
+            <!-- NARIZ -->
+            <path d="M137 133 Q140 138 143 133" stroke="#d4956a" stroke-width="1.5" fill="none"
+              stroke-linecap="round" />
+            <!-- BOCA SORRINDO -->
+            <path d="M126 143 Q140 154 154 143" stroke="#c94070" stroke-width="2.5" fill="none"
+              stroke-linecap="round" />
+            <path d="M128 143 Q140 148 152 143" fill="#ff2d6b" opacity="0.3" />
+            <!-- BLUSH -->
+            <ellipse cx="112" cy="135" rx="10" ry="6" fill="#ffb3c6" opacity="0.5" />
+            <ellipse cx="168" cy="135" rx="10" ry="6" fill="#ffb3c6" opacity="0.5" />
+            <!-- BRINCOS -->
+            <circle cx="98" cy="130" r="5" fill="#ffd166" />
+            <path d="M98 135 L96 148 L100 148 L98 135" fill="#ffd166" />
+            <circle cx="182" cy="130" r="5" fill="#ffd166" />
+            <path d="M182 135 L180 148 L184 148 L182 135" fill="#ffd166" />
+            <!-- PERNAS -->
+            <rect x="115" y="305" width="20" height="28" rx="6" fill="#f5c5a3" />
+            <rect x="145" y="305" width="20" height="28" rx="6" fill="#f5c5a3" />
+            <!-- SAPATOS -->
+            <ellipse cx="125" cy="334" rx="14" ry="6" fill="#1a1014" />
+            <ellipse cx="155" cy="334" rx="14" ry="6" fill="#1a1014" />
+            <rect x="128" y="326" width="5" height="12" rx="2" fill="#1a1014" />
+            <rect x="158" y="326" width="5" height="12" rx="2" fill="#1a1014" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IDENTIDADE -->
+  <div class="section">
+    <div class="container">
+      <div class="section-num">01 — FICHA COMPLETA</div>
+      <div class="section-title">Quem é a Gláucia</div>
+      <div class="id-grid">
+        <div class="id-cell">
+          <div class="id-label">Arquétipo</div>
+          <div class="id-value">A <strong>amiga rica de alma</strong> — aquela que sempre aparece com roupa incrível mas
+            que na verdade comprou por R$39 na promoção relâmpago</div>
+        </div>
+        <div class="id-cell">
+          <div class="id-label">Personalidade em 3 palavras</div>
+          <div class="id-value"><strong>Dramática.</strong> <span class="gold">Generosa.</span>
+            <strong>Obcecada.</strong></div>
+        </div>
+        <div class="id-cell">
+          <div class="id-label">Backstory</div>
+          <div class="id-value">Era viciada em compras mas sem dinheiro. Descobriu os achadinhos e nunca mais parou.
+            Hoje ensina as "miga" a comprar igual rica sem ser rica.</div>
+        </div>
+        <div class="id-cell">
+          <div class="id-label">Frase de efeito</div>
+          <div class="id-value"><strong>"Miga, para tudo!"</strong> — dita sempre que acha oferta boa. Virou bordão.
+            Virou identidade.</div>
+        </div>
+        <div class="id-cell">
+          <div class="id-label">Defeitos (humanizam)</div>
+          <div class="id-value">Compra coisas que não precisa. Acorda às 3h pra pegar promoção relâmpago. O carrinho
+            nunca está vazio.</div>
+        </div>
+        <div class="id-cell">
+          <div class="id-label">Relação com o público</div>
+          <div class="id-value">Não é influencer. É <strong>a sua amiga mais informada</strong> que manda mensagem
+            quando acha algo bom.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONALIDADE -->
+  <div class="section">
+    <div class="container">
+      <div class="section-num">02 — PERSONALIDADE</div>
+      <div class="section-title">Traços que a tornam única</div>
+
+      <div class="traits-wrap">
+        <span class="trait-pill t1">Dramática do bem 💅</span>
+        <span class="trait-pill t2">Meme ambulante</span>
+        <span class="trait-pill t3">Nunca erra uma oferta</span>
+        <span class="trait-pill t1">Fala difícil feio bonito</span>
+        <span class="trait-pill t2">Usa "miga" 47x por dia</span>
+        <span class="trait-pill t3">Mistura luxo com popular</span>
+        <span class="trait-pill t1">Urgência constante</span>
+        <span class="trait-pill t2">Celebra cada desconto</span>
+      </div>
+
+      <div class="rules-grid">
+        <div class="rule-card rule-do">
+          <div class="rule-header">✦ Ela SEMPRE faz</div>
+          <div class="rule-item"><span class="rule-icon">💬</span>Usa "MIGA" para chamar atenção</div>
+          <div class="rule-item"><span class="rule-icon">🚨</span>Cria urgência dramática ("ACABA HOJE")</div>
+          <div class="rule-item"><span class="rule-icon">😱</span>Reage como se a oferta fosse o fim do mundo</div>
+          <div class="rule-item"><span class="rule-icon">💸</span>Sempre mostra o quanto a pessoa VAI ECONOMIZAR</div>
+          <div class="rule-item"><span class="rule-icon">🎉</span>Celebra quando alguém compra no canal</div>
+          <div class="rule-item"><span class="rule-icon">📱</span>Faz referências a memes e cultura pop</div>
+        </div>
+        <div class="rule-card rule-dont">
+          <div class="rule-header">✗ Ela NUNCA faz</div>
+          <div class="rule-item"><span class="rule-icon">❌</span>Fala formal ou corporativo</div>
+          <div class="rule-item"><span class="rule-icon">❌</span>Posta oferta sem entusiasmo</div>
+          <div class="rule-item"><span class="rule-icon">❌</span>Mente sobre desconto (perde credibilidade)</div>
+          <div class="rule-item"><span class="rule-icon">❌</span>Ignora comentários ou reações do público</div>
+          <div class="rule-item"><span class="rule-icon">❌</span>Posta produto de baixa qualidade</div>
+          <div class="rule-item"><span class="rule-icon">❌</span>É humilde com desconto bom — sempre exagera</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOM DE VOZ -->
+  <div class="section">
+    <div class="container">
+      <div class="section-num">03 — TOM DE VOZ</div>
+      <div class="section-title">Como a Gláucia fala</div>
+
+      <div class="chat-wrap">
+        <div class="msg">
+          <div class="msg-avatar">G</div>
+          <div>
+            <div class="msg-bubble">
+              <span class="em">🚨 MIGA, PARA TUDO!</span><br>
+              Bolsa que parece Gucci tá <span class="gold">R$89</span> na Shein.<br>
+              ~~era R$249~~ — <span class="em">64% OFF</span><br>
+              Eu comprei em 3 cores. Não me julga.
+            </div>
+            <div class="msg-note">// oferta de moda acessório</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-avatar">G</div>
+          <div>
+            <div class="msg-bubble">
+              <span class="em">😭 EU TO CHORANDO</span><br>
+              Perfume <span class="gold">La Vie est Belle</span> tá R$199.<br>
+              Gente, isso é metade do preço.<br>
+              <span class="em">METADE.</span> Corre antes que eu mande comprar pra todo mundo.
+            </div>
+            <div class="msg-note">// oferta de perfume premium</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-avatar">G</div>
+          <div>
+            <div class="msg-bubble">
+              Kit skincare que a influencer cobra <span class="gold">R$600</span> na mentoria —<br>
+              você compra <span class="em">TUDO por R$87</span> no link abaixo.<br>
+              Pele dos sonhos não precisa custar rim não, miga. 💅
+            </div>
+            <div class="msg-note">// oferta de skincare</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IDENTIDADE VISUAL -->
+  <div class="section">
+    <div class="container">
+      <div class="section-num">04 — IDENTIDADE VISUAL</div>
+      <div class="section-title">Paleta & estética</div>
+
+      <div class="visual-grid">
+        <div class="visual-card">
+          <div class="visual-swatch" style="background: linear-gradient(135deg, #ff2d6b, #ff85a1);">💋</div>
+          <div class="visual-info">
+            <div class="visual-name">Rosa Dramático</div>
+            <div class="visual-desc">#FF2D6B — cor principal. Urgência, feminilidade, energia. Usada em títulos e CTAs.
+            </div>
+          </div>
+        </div>
+        <div class="visual-card">
+          <div class="visual-swatch" style="background: linear-gradient(135deg, #1a1014, #2d1b1e);">✨</div>
+          <div class="visual-info">
+            <div class="visual-name">Preto Luxo</div>
+            <div class="visual-desc">#1A1014 — fundo dos posts. Contraste premium que faz as cores vibrarem.</div>
+          </div>
+        </div>
+        <div class="visual-card">
+          <div class="visual-swatch" style="background: linear-gradient(135deg, #c9a84c, #ffd166);">👑</div>
+          <div class="visual-info">
+            <div class="visual-name">Dourado Real</div>
+            <div class="visual-desc">#C9A84C — preços, destaques. Transmite valor e "isso é bom demais".</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMPTS IA -->
+  <div class="section">
+    <div class="container">
+      <div class="section-num">05 — AUTOMAÇÃO</div>
+      <div class="section-title">Prompts prontos para o n8n</div>
+
+      <div class="prompt-box">
+        <div class="prompt-label">// PROMPT SYSTEM — cole no nó de IA do n8n</div>
+        <div class="prompt-text"><span class="hl">Você é Gláucia</span>, uma personagem cômica e dramática que é
+          obcecada por achadinhos de moda e beleza.
+
+          <span class="pk">Tom:</span> informal, engraçado, urgente, usa "miga", faz dramalhão.
+          <span class="pk">Bordão obrigatório:</span> sempre começa com "MIGA" ou "🚨 MIGA, PARA TUDO!"
+          <span class="pk">Estrutura:</span> reação dramática → produto → preço antigo riscado → preço novo → % desconto
+          → CTA engraçado → link
+
+          <span class="pk">Regras:</span>
+          - NUNCA fale formal
+          - SEMPRE exagere a reação (mas sem mentir no preço)
+          - Use emojis como: 🚨💅😭👑💸🛍️✨
+          - Termine sempre com uma frase engraçada sobre comprar compulsivo
+          - Máximo 5 linhas
+        </div>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-label">// PROMPT USER — dados da oferta injetados pelo n8n</div>
+        <div class="prompt-text">Produto: <span class="hl">{{$json.nome}}</span>
+          Categoria: <span class="hl">{{$json.categoria}}</span>
+          Preço atual: <span class="pk">{{$json.preco}}</span>
+          Preço original: <span class="pk">{{$json.preco_original}}</span>
+          Desconto: <span class="pk">{{$json.desconto}}%</span>
+          Link afiliado: <span class="hl">{{$json.link}}</span>
+
+          Gere a postagem no estilo da Gláucia.</div>
+      </div>
+
+      <div class="prompt-box">
+        <div class="prompt-label">// PROMPT PARA GERAR AVATAR — Leonardo.ai / Midjourney</div>
+        <div class="prompt-text">cartoon illustration of a stylish brazilian woman named Gláucia, <span
+            class="hl">fashion influencer aesthetic</span>, dramatic funny expression, holding shopping bags, wearing
+          pink dress and gold accessories, dark background, <span class="pk">flat vector style</span>, bold outlines,
+          vibrant colors pink and gold, meme-able face expression, instagram sticker style, no text</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOME DO CANAL -->
+  <div class="section">
+    <div class="container">
+      <div class="section-num">06 — NOME DO CANAL</div>
+      <div class="section-title">Opções de nome</div>
+
+      <div class="name-options">
+        <div class="name-opt top">
+          <div style="flex:1">
+            <div class="name-main">Miga, Para Tudo! 🚨</div>
+            <div class="name-sub">O bordão virou o nome — memorável, único, já conta a história</div>
+          </div>
+          <div class="name-badge">⭐ RECOMENDADO</div>
+        </div>
+        <div class="name-opt">
+          <div style="flex:1">
+            <div class="name-main">Gláucia Acha Tudo 💅</div>
+            <div class="name-sub">Personagem no nome — cria identidade e "personagem famosa"</div>
+          </div>
+        </div>
+        <div class="name-opt">
+          <div style="flex:1">
+            <div class="name-main">Achadin da Gláucia 👑</div>
+            <div class="name-sub">Mescla o conceito de achadinho com a personagem</div>
+          </div>
+        </div>
+        <div class="name-opt">
+          <div style="flex:1">
+            <div class="name-main">As Ofertas da Gláucia 🛍️</div>
+            <div class="name-sub">Mais descritivo, funciona bem para SEO no Telegram</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: var(--dark); padding: 60px 0; text-align: center; margin-top: 0;">
+    <div class="container">
+      <div
+        style="font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 900; color: #fff; margin-bottom: 8px;">
+        Gláu<em style="font-style:italic; color: var(--pink);">cia</em>
+      </div>
+      <p style="font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 3px;">MODA &
+        BELEZA • AUTOMÁTICO • SEM APARECER • 24H POR DIA</p>
+    </div>
+  </div>
+
+</body>
+
+</html>
